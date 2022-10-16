@@ -1,0 +1,43 @@
+* {
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+body {
+    background-color: rgb(64,64,64);
+    /* overflow: hidden;
+    max-width: 100vw; */
+}
+.container {
+    position: relative;
+    max-width: 100vw;
+    /* overflow-x: scroll;
+    overflow-y: hidden; */
+    white-space: nowrap;
+    transition: all 0.2s;
+    user-select: none;
+    cursor: pointer;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+    overflow: auto;
+    cursor: grab;
+}
+.container::-webkit-scrollbar { 
+    display: none; 
+}
+.outer {
+    position:relative;
+    height:200px;
+}
+.test {
+    height: 200px;
+    width: 5000px;
+    background:linear-gradient(to right, red, blue);
+    position:absolute;
+    top:0;
+    left:0;
+    /* bottom:200px; */
+    z-index: 2;
+    text-align: left;
+    outline:1px solid red;
+}
