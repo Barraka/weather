@@ -57,12 +57,41 @@ function getBg(clouds) {
     let r=parseInt(0 + (80*clouds/100));
     let g=parseInt(0 + (80*clouds/100));
     let b=parseInt(255 - (175*clouds/100));
-    console.log('color: r ' + r + '  g: ' + g +'   b: ' + b);
     return `rgb(${r},${g},${b})`;
 }
 function createCard(d) {
     let cardOuter = document.createElement('div');
     cardOuter.classList.add('cardOuter');
+    //Date
+    dateData=new Date(d.dt * 1000)
+    let date = document.createElement('div');
+    date.classList.add('date');
+    
+    let day = document.createElement('div');
+    day.classList.add('day');
+    day.textContent=dateData.toLocaleDateString("en-EN",{weekday: 'long'}).slice(0,3);
+    let dayOuter = document.createElement('div');
+    dayOuter.classList.add('dayOuter');
+    let day2 = document.createElement('div');
+    day2.classList.add('day2');
+    day2.textContent=dateData.getDate();
+    
+    let month = document.createElement('div');
+    month.classList.add('month');
+    month.textContent=dateData.toDateString().substr(4,3);
+    dayOuter.appendChild(day2);
+    dayOuter.appendChild(month);
+    let time = document.createElement('div');
+    time.classList.add('time');
+    time.textContent=dateData.toTimeString().substr(0,5);
+    date.appendChild(day);
+    date.appendChild(dayOuter);
+    
+    // date.appendChild(month);
+    date.appendChild(time);
+    cardOuter.appendChild(date);
+    
+
     //Icon
     const code = d.weather[0].icon;
     let icon = document.createElement('div');
@@ -80,7 +109,7 @@ function createCard(d) {
     //Temp
     let temp = document.createElement('div');
     temp.classList.add('temp');
-    temp.textContent=convertToCelsius(d.main.temp);
+    temp.innerHTML=convertToCelsius(d.main.temp)+'&#8451';
     cardOuter.appendChild(temp);
     //Clouds
     let clouds=d.clouds.all;
@@ -121,9 +150,6 @@ function scrollBehavior() {
     });
     innerForecast.addEventListener('mousemove', (e) => {drag(e);});
     innerForecast.addEventListener('swipe:left', (e) => {drag(e);});
-    // innerForecast.addEventListener('touchstart', (e) => {down(e);});
-    // innerForecast.addEventListener('touchmove', (e) => {drag(e);});
-    // innerForecast.addEventListener('touchleave', (e) => {leave(e);});
     function down(e) {
         isDown = true;
         innerForecast.classList.add('active');
