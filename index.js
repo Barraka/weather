@@ -17,7 +17,10 @@ async function getWeatherData() {
     
     let response = await fetch(url_now);
     let data = await response.json();
-    window.data = data;
+    window.dataNow = data;
+    //Overlay
+    let overlay = document.createElement('div');
+    overlay.classList.add('overlay');
     //Icon
     const code = data.weather[0].icon;
     let icon = document.createElement('div');
@@ -37,8 +40,11 @@ async function getWeatherData() {
     temp.classList.add('temp');
     temp.textContent=convertToCelsius(data.main.temp);
     now.appendChild(temp);
-    // //Build
-    // container.appendChild(now);
+    // now.appendChild(overlay);
+    //Adapt BG
+    let clouds=data.clouds.all;
+    now.style.backgroundColor=getBg(clouds);
+    
 
     //Forecast
     response = await fetch(url_forecast);
@@ -46,6 +52,13 @@ async function getWeatherData() {
     window.data2=data;
     data.list.forEach(x=>createCard(x));
 
+}
+function getBg(clouds) {
+    let r=parseInt(0 + (80*clouds/100));
+    let g=parseInt(0 + (80*clouds/100));
+    let b=parseInt(255 - (175*clouds/100));
+    console.log('color: r ' + r + '  g: ' + g +'   b: ' + b);
+    return `rgb(${r},${g},${b})`;
 }
 function createCard(d) {
     let cardOuter = document.createElement('div');
@@ -69,6 +82,9 @@ function createCard(d) {
     temp.classList.add('temp');
     temp.textContent=convertToCelsius(d.main.temp);
     cardOuter.appendChild(temp);
+    //Clouds
+    let clouds=d.clouds.all;
+    cardOuter.style.backgroundColor=getBg(clouds);
     //Build
     innerForecast.appendChild(cardOuter);
 
@@ -97,7 +113,7 @@ function scrollBehavior() {
       down(e);
     });
     innerForecast.addEventListener('mouseleave', () => {
-      leave(e);
+      leave();
     });
     innerForecast.addEventListener('mouseup', () => {
       isDown = false;
@@ -105,9 +121,9 @@ function scrollBehavior() {
     });
     innerForecast.addEventListener('mousemove', (e) => {drag(e);});
     innerForecast.addEventListener('swipe:left', (e) => {drag(e);});
-    innerForecast.addEventListener('touchstart', (e) => {down(e);});
-    innerForecast.addEventListener('touchmove', (e) => {drag(e);});
-    innerForecast.addEventListener('touchleave', (e) => {leave(e);});
+    // innerForecast.addEventListener('touchstart', (e) => {down(e);});
+    // innerForecast.addEventListener('touchmove', (e) => {drag(e);});
+    // innerForecast.addEventListener('touchleave', (e) => {leave(e);});
     function down(e) {
         isDown = true;
         innerForecast.classList.add('active');
@@ -116,7 +132,7 @@ function scrollBehavior() {
         if(currentPos==='' || currentPos===null)currentPos=0;
         else currentPos=currentPos[0];
     }
-    function leave(e) {
+    function leave() {
         isDown = false;
         innerForecast.classList.remove('active');
     }
