@@ -19,25 +19,61 @@ body {
     cursor: pointer;
     -ms-overflow-style: none;
     scrollbar-width: none; 
-    overflow: auto;
-    cursor: grab;
+    /* overflow: auto; */
+    /* cursor: grab; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width:60%;
+    overflow:hidden;
+    margin:0 auto;
 }
 .container::-webkit-scrollbar { 
     display: none; 
 }
-.outer {
-    position:relative;
-    height:200px;
-}
-.test {
+/* .outer {
+    
+} */
+.innerForecast {
     height: 200px;
-    width: 5000px;
     background:linear-gradient(to right, red, blue);
     position:absolute;
     top:0;
     left:0;
-    /* bottom:200px; */
     z-index: 2;
     text-align: left;
-    outline:1px solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor:grab;
+}
+.innerForecast:active {
+    cursor: grabbing;
+}
+.forecast {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position:relative;
+    height:200px;
+    width:100%;
+}
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+  }
+.cardOuter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 10px;
+    padding:4px;
+    border-radius:10px;
+    background-color: rgb(64,128,65);
+    border: 2px solid transparent;
 }
