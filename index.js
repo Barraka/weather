@@ -94,17 +94,10 @@ function scrollBehavior() {
     let currentPos;
     
     innerForecast.addEventListener('mousedown', (e) => {
-        // drag(e);
-      isDown = true;
-      innerForecast.classList.add('active');
-      startX = e.pageX;      
-      currentPos = innerForecast.style.transform.match(/(\d+)/);
-      if(currentPos==='' || currentPos===null)currentPos=0;
-      else currentPos=currentPos[0];
+      down(e);
     });
     innerForecast.addEventListener('mouseleave', () => {
-      isDown = false;
-      innerForecast.classList.remove('active');
+      leave(e);
     });
     innerForecast.addEventListener('mouseup', () => {
       isDown = false;
@@ -112,6 +105,21 @@ function scrollBehavior() {
     });
     innerForecast.addEventListener('mousemove', (e) => {drag(e);});
     innerForecast.addEventListener('swipe:left', (e) => {drag(e);});
+    innerForecast.addEventListener('touchstart', (e) => {down(e);});
+    innerForecast.addEventListener('touchmove', (e) => {drag(e);});
+    innerForecast.addEventListener('touchleave', (e) => {leave(e);});
+    function down(e) {
+        isDown = true;
+        innerForecast.classList.add('active');
+        startX = e.pageX;      
+        currentPos = innerForecast.style.transform.match(/(\d+)/);
+        if(currentPos==='' || currentPos===null)currentPos=0;
+        else currentPos=currentPos[0];
+    }
+    function leave(e) {
+        isDown = false;
+        innerForecast.classList.remove('active');
+    }
     function drag(e) {
         if(!isDown) return;
         e.preventDefault();    
