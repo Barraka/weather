@@ -9,7 +9,8 @@ golook.addEventListener('click',getWeatherData);
 const innerForecast = document.querySelector('.innerForecast');
 window.slider=innerForecast;
 scrollBehavior();
-
+let dataNow;
+let dataForecast;
 async function getWeatherData() {
     let town=search.value;
     let url_now=`https://api.openweathermap.org/data/2.5/weather?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
@@ -50,7 +51,12 @@ async function getWeatherData() {
     response = await fetch(url_forecast);
     data = await response.json();
     window.data2=data;
-    data.list.forEach(x=>createCard(x));
+    dataForecast=data;
+    // data.list.forEach(x=>createCard(x));
+    const listLength=data.list.length;
+    for(let i=0;i<listLength;i++) {
+        createCard(data.list[i],i);
+    }
 
 }
 function getBg(clouds) {
@@ -59,9 +65,10 @@ function getBg(clouds) {
     let b=parseInt(255 - (175*clouds/100));
     return `rgb(${r},${g},${b})`;
 }
-function createCard(d) {
+function createCard(d,i) {
     let cardOuter = document.createElement('div');
     cardOuter.classList.add('cardOuter');
+    cardOuter.setAttribute('data-id',i);
     //Date
     dateData=new Date(d.dt * 1000)
     let date = document.createElement('div');
@@ -114,9 +121,55 @@ function createCard(d) {
     //Clouds
     let clouds=d.clouds.all;
     cardOuter.style.backgroundColor=getBg(clouds);
+
+    //More info icon
+    let more = document.createElement('div');
+    more.classList.add('more');
+    more.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M22.65 34h3v-8.3H34v-3h-8.35V14h-3v8.7H14v3h8.65ZM24 44q-4.1 0-7.75-1.575-3.65-1.575-6.375-4.3-2.725-2.725-4.3-6.375Q4 28.1 4 23.95q0-4.1 1.575-7.75 1.575-3.65 4.3-6.35 2.725-2.7 6.375-4.275Q19.9 4 24.05 4q4.1 0 7.75 1.575 3.65 1.575 6.35 4.275 2.7 2.7 4.275 6.35Q44 19.85 44 24q0 4.1-1.575 7.75-1.575 3.65-4.275 6.375t-6.35 4.3Q28.15 44 24 44Zm.05-3q7.05 0 12-4.975T41 23.95q0-7.05-4.95-12T24 7q-7.05 0-12.025 4.95Q7 16.9 7 24q0 7.05 4.975 12.025Q16.95 41 24.05 41ZM24 24Z"/></svg>';
+    more.addEventListener('click',showMore);
+
+    function showMore(e) {
+        let id=e.currentTarget.parentElement.getAttribute('data-id');
+        id=parseInt(id);
+        let overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        cardOuter.appendChild(overlay);
+        //Clouds
+        let clouds = document.createElement('div');
+        clouds.classList.add('clouds');
+        clouds.textContent='Clouds % : ' + dataForecast.list[id].clouds.all;
+        //Humidity
+        let humidity = document.createElement('div');
+        humidity.classList.add('humidity');
+        humidity.textContent='Humidity: ' + dataForecast.list[id].main.humidity;
+        //TempMin
+        let tempMin = document.createElement('div');
+        tempMin.classList.add('tempMin');
+        tempMin.textContent='Temp. Min: \n' + dataForecast.list[id].main.temp_min;
+        //TempMax
+        let tempMax = document.createElement('div');
+        tempMax.classList.add('tempMax');
+        tempMax.textContent='Temp. Max: ' + dataForecast.list[id].main.temp_max;
+        //Wind
+        let wind = document.createElement('div');
+        wind.classList.add('wind');
+        wind.textContent='Wind: ' + dataForecast.list[id].wind.speed;
+        let deg = document.createElement('div');
+        deg.classList.add('deg');
+        deg.textContent='Deg: ' + dataForecast.list[id].wind.deg;
+        //Mount
+        overlay.appendChild(clouds);
+        overlay.appendChild(humidity);
+        overlay.appendChild(tempMin);
+        overlay.appendChild(tempMax);
+        overlay.appendChild(wind);
+        overlay.appendChild(deg);
+
+
+    }
+    cardOuter.appendChild(more);
     //Build
     innerForecast.appendChild(cardOuter);
-
 }
 function convertToCelsius(t) {
     const value=parseFloat(t)-273.13;
