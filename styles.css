@@ -88,6 +88,21 @@ body {
 }
 .nowText {
     font-size: 14px;
+    margin-bottom: 5px;
+}
+.tempOuter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:4px;
+    cursor: pointer;
+}
+.tempSign {
+    transition: all 0.3s ease-in;
+}
+.tempOuter:hover .tempSign {
+    transform:scale(1.4);
+    color:green;
 }
 .forecast {
     display: flex;

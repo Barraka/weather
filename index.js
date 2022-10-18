@@ -56,15 +56,19 @@ async function getWeatherData() {
     tempminLabel.textContent = 'Temp. Min:';
     let tempMin = document.createElement('div');
     tempMin.classList.add('nowText');
-    tempMin.textContent = data.main.temp_min;
+    tempMin.setAttribute('data-temp','now');
+    tempMin.innerHTML = convertToCelsius(data.main.temp_min) + ' &#8451';
     let tempmaxLabel = document.createElement('div');
     tempmaxLabel.classList.add('nowLabel');
     tempmaxLabel.textContent = 'Temp. Max:';
     let tempMax = document.createElement('div');
     tempMax.classList.add('nowText');
-    tempMax.innerHTML=data.main.temp_max;
+    tempMax.setAttribute('data-temp','now');
+    tempMax.innerHTML=convertToCelsius(data.main.temp_max)+' &#8451';
+    // if(degrees==='celcius')temp.innerHTML=convertToCelsius(d.main.temp)+' &#8451';
+    // else temp.innerHTML=convertToFarhenheit(d.main.temp) + ' &#8457';
     let humLabel = document.createElement('div');
-    humLabel.classList.add('overlanowLabelyLabel');
+    humLabel.classList.add('nowLabel');
     humLabel.textContent = 'Humidity:';
     let humidity = document.createElement('div');
     humidity.classList.add('nowText');
@@ -91,17 +95,28 @@ async function getWeatherData() {
     description.classList.add('description');
     description.textContent=data.weather[0].description;
     //Temp
+    let tempOuter = document.createElement('div');
+    tempOuter.classList.add('tempOuter');
     let temp = document.createElement('div');
     temp.classList.add('temp');
-    temp.setAttribute('data-temp','now');
-    if(degrees==='celcius')temp.innerHTML=convertToCelsius(data.main.temp)+' &#8451';
-    else temp.innerHTML=convertToFarhenheit(data.main.temp) + ' &#8457';
-    temp.addEventListener('click',toggleTemp);
+    let tempSign = document.createElement('div');
+    tempSign.classList.add('tempSign');
+    if(degrees==='celcius') {
+        temp.innerHTML=convertToCelsius(data.main.temp);
+        tempSign.innerHTML=' &#8451';
+    }
+    else {
+        temp.innerHTML=convertToFarhenheit(data.main.temp) + ' &#8457';
+        tempSign.innerHTML=' &#8457';
+    }
+    tempOuter.addEventListener('click',toggleTemp);
+    tempOuter.appendChild(temp);
+    tempOuter.appendChild(tempSign);
     let middlePane = document.createElement('div');
     middlePane.classList.add('middlePane');
     middlePane.appendChild(icon);
     middlePane.appendChild(description);
-    middlePane.appendChild(temp);
+    middlePane.appendChild(tempOuter);
     //Mount
     now.appendChild(leftPane);
     now.appendChild(middlePane);
@@ -127,6 +142,16 @@ function toggleTemp() {
     if(degrees==='celcius')degrees='fahrenheit';
     else degrees='celcius';
     let allTemps=document.querySelectorAll('div[data-temp]');
+    let tempSign = document.querySelector('.tempSign');
+    let temp = document.querySelector('.temp');
+    if(degrees==='celcius') {
+        temp.textContent=((parseFloat(temp.textContent) - 32) * 5/9).toFixed(1);
+        tempSign.innerHTML=' &#8451';
+    }
+    else {
+        temp.textContent=((parseFloat(temp.textContent) * 9/5) +32).toFixed(1);
+        tempSign.innerHTML=' &#8457';
+    }
     allTemps.forEach(x=>{
         let currentTemp=parseFloat(x.textContent);
         if(degrees==='celcius') {
