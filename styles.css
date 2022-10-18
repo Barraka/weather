@@ -45,25 +45,50 @@ body {
     padding:10px;
     
 }
-    .outerSearch input {
-        text-align: center;
-        border-radius: 5px;
-        border:2px solid transparent;
-    }
+.outerSearch input {
+    text-align: center;
+    border-radius: 5px;
+    border:2px solid transparent;
+}
 .outerSearch svg {
     transform: scale(0.7);
+    fill:blue;
+    stroke:blue;
+}
+.outerSearch svg:hover {
+    cursor: pointer;
+    stroke:rgb(9, 146, 32);
+    fill:rgb(9, 146, 32);
 }
 .now {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     /* background-color: rgb(0, 0, 255); */
     border-radius: 10px;
-    width:200px;
+    /* width:200px; */
+    width:fit-content;
     position:relative;
+    color:white;
+    padding:20px;
+    gap:40px;
 }
-
+.leftPane, .middlePane, .rightPane {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.nowLabel {
+    font-size: 12px;
+    margin-bottom:-4px;
+}
+.nowLabel:not(:first-child) {
+    text-decoration:overline;
+}
+.nowText {
+    font-size: 14px;
+}
 .forecast {
     display: flex;
     justify-content: center;
@@ -100,6 +125,7 @@ body {
     cursor:grab;
     padding:10px 0px;
     height:100%;
+    color:white;
 }
 .innerForecast:active {
     cursor: grabbing;
@@ -131,13 +157,16 @@ img {
     align-items: center;
     gap:5px;
 }
-.description {
-    font-size: 12px;
-}
+
 .more {
     transform: scale(0.7);
     stroke:white;
     fill:white;
+    cursor: pointer;
+}
+.more:hover {
+    stroke:rgb(9, 146, 32);
+    fill:rgb(9, 146, 32);
 }
 .overlay {
     position:absolute;
@@ -145,10 +174,33 @@ img {
     left:0;
     width:100%;
     height:100%;
-    background-color: yellow;
+    background-color: rgb(9, 78, 206);
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    color:white;
+    padding: 10px;
+}
+.overlayLabel {
+    font-size: 10px;
+    margin-bottom:-4px;
+    
+}
+.overlayLabel:not(:first-child) {
+    text-decoration:overline;
+}
+.overlayText {
+    font-size:14px;
+}
+.overlay svg {
+    transform: scale(0.7);
+    fill:white;
+    stroke:white;
+}
+.overlay svg:hover {
+    cursor: pointer;
+    stroke:rgb(9, 146, 32);
+    fill:rgb(9, 146, 32);
 }

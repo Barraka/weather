@@ -7,6 +7,7 @@ let now = document.querySelector('.now');
 let forecast = document.querySelector('.forecast');
 golook.addEventListener('click',getWeatherData);
 const innerForecast = document.querySelector('.innerForecast');
+let degrees='celcius';
 window.slider=innerForecast;
 scrollBehavior();
 let dataNow;
@@ -22,6 +23,61 @@ async function getWeatherData() {
     //Overlay
     let overlay = document.createElement('div');
     overlay.classList.add('overlay');
+    //Left pane
+    let cloudsLabel = document.createElement('div');
+    cloudsLabel.classList.add('nowLabel');
+    cloudsLabel.textContent = 'Clouds %:';
+    let cloudsP = document.createElement('div');
+    cloudsP.classList.add('nowText');
+    cloudsP.textContent=data.clouds.all;
+    let speedLab = document.createElement('div');
+    speedLab.classList.add('nowLabel');
+    speedLab.textContent='Wind Speed:';
+    let speed = document.createElement('div');
+    speed.classList.add('nowText');
+    speed.textContent=data.wind.speed;
+    let debLabel = document.createElement('div');
+    debLabel.classList.add('nowLabel');
+    debLabel.textContent='Wind Dir. :';
+    let deg = document.createElement('div');
+    deg.classList.add('nowText');
+    deg.textContent = data.wind.deg;
+    let leftPane = document.createElement('div');
+    leftPane.classList.add('leftPane');
+    leftPane.appendChild(cloudsLabel);
+    leftPane.appendChild(cloudsP);
+    leftPane.appendChild(speedLab);
+    leftPane.appendChild(speed);
+    leftPane.appendChild(debLabel);
+    leftPane.appendChild(deg);
+    //Right pane
+    let tempminLabel = document.createElement('div');
+    tempminLabel.classList.add('nowLabel');
+    tempminLabel.textContent = 'Temp. Min:';
+    let tempMin = document.createElement('div');
+    tempMin.classList.add('nowText');
+    tempMin.textContent = data.main.temp_min;
+    let tempmaxLabel = document.createElement('div');
+    tempmaxLabel.classList.add('nowLabel');
+    tempmaxLabel.textContent = 'Temp. Max:';
+    let tempMax = document.createElement('div');
+    tempMax.classList.add('nowText');
+    tempMax.innerHTML=data.main.temp_max;
+    let humLabel = document.createElement('div');
+    humLabel.classList.add('overlanowLabelyLabel');
+    humLabel.textContent = 'Humidity:';
+    let humidity = document.createElement('div');
+    humidity.classList.add('nowText');
+    humidity.textContent = data.main.humidity;
+    let rightPane = document.createElement('div');
+    rightPane.classList.add('rightPane');
+    rightPane.appendChild(tempminLabel);
+    rightPane.appendChild(tempMin);
+    rightPane.appendChild(tempmaxLabel);
+    rightPane.appendChild(tempMax);
+    rightPane.appendChild(humLabel);
+    rightPane.appendChild(humidity);
+    //Middle Pane
     //Icon
     const code = data.weather[0].icon;
     let icon = document.createElement('div');
@@ -30,18 +86,26 @@ async function getWeatherData() {
     iconImg.classList.add('iconImg');
     iconImg.src=`https://openweathermap.org/img/wn/${code}@2x.png`
     icon.appendChild(iconImg);
-    now.appendChild(icon);
     //Description
     let description = document.createElement('div');
     description.classList.add('description');
     description.textContent=data.weather[0].description;
-    now.appendChild(description);
     //Temp
     let temp = document.createElement('div');
     temp.classList.add('temp');
-    temp.textContent=convertToCelsius(data.main.temp);
-    now.appendChild(temp);
-    // now.appendChild(overlay);
+    temp.setAttribute('data-temp','now');
+    if(degrees==='celcius')temp.innerHTML=convertToCelsius(data.main.temp)+' &#8451';
+    else temp.innerHTML=convertToFarhenheit(data.main.temp) + ' &#8457';
+    temp.addEventListener('click',toggleTemp);
+    let middlePane = document.createElement('div');
+    middlePane.classList.add('middlePane');
+    middlePane.appendChild(icon);
+    middlePane.appendChild(description);
+    middlePane.appendChild(temp);
+    //Mount
+    now.appendChild(leftPane);
+    now.appendChild(middlePane);
+    now.appendChild(rightPane);
     //Adapt BG
     let clouds=data.clouds.all;
     now.style.backgroundColor=getBg(clouds);
@@ -59,6 +123,22 @@ async function getWeatherData() {
     }
 
 }
+function toggleTemp() {
+    if(degrees==='celcius')degrees='fahrenheit';
+    else degrees='celcius';
+    let allTemps=document.querySelectorAll('div[data-temp]');
+    allTemps.forEach(x=>{
+        let currentTemp=parseFloat(x.textContent);
+        if(degrees==='celcius') {
+            let newTemp = (currentTemp - 32) * 5/9;
+            x.innerHTML=newTemp.toFixed(1) + ' &#8451';
+        }
+        else {
+            let newTemp = (currentTemp * 9/5) + 32;
+            x.innerHTML=newTemp.toFixed(1) + ' &#8457';
+        }
+    });
+}   
 function getBg(clouds) {
     let r=parseInt(0 + (80*clouds/100));
     let g=parseInt(0 + (80*clouds/100));
@@ -116,7 +196,10 @@ function createCard(d,i) {
     //Temp
     let temp = document.createElement('div');
     temp.classList.add('temp');
-    temp.innerHTML=convertToCelsius(d.main.temp)+'&#8451';
+    temp.setAttribute('data-temp',i);
+    if(degrees==='celcius')temp.innerHTML=convertToCelsius(d.main.temp)+' &#8451';
+    else temp.innerHTML=convertToFarhenheit(d.main.temp) + ' &#8457';
+    // temp.innerHTML=convertToCelsius(d.main.temp);
     cardOuter.appendChild(temp);
     //Clouds
     let clouds=d.clouds.all;
@@ -135,36 +218,71 @@ function createCard(d,i) {
         overlay.classList.add('overlay');
         cardOuter.appendChild(overlay);
         //Clouds
+        let cloudsLabel = document.createElement('div');
+        cloudsLabel.classList.add('overlayLabel');
         let clouds = document.createElement('div');
-        clouds.classList.add('clouds');
-        clouds.textContent='Clouds % : ' + dataForecast.list[id].clouds.all;
+        clouds.classList.add('overlayText');
+        cloudsLabel.textContent='Clouds % :';
+        clouds.textContent=dataForecast.list[id].clouds.all;
         //Humidity
+        let humidityLabel = document.createElement('div');
+        humidityLabel.classList.add('overlayLabel');
         let humidity = document.createElement('div');
-        humidity.classList.add('humidity');
-        humidity.textContent='Humidity: ' + dataForecast.list[id].main.humidity;
+        humidity.classList.add('overlayText');
+        humidityLabel.textContent='Humidity:';
+        humidity.textContent= dataForecast.list[id].main.humidity;
         //TempMin
+        let tempLabel = document.createElement('div');
+        tempLabel.classList.add('overlayLabel');
         let tempMin = document.createElement('div');
-        tempMin.classList.add('tempMin');
-        tempMin.textContent='Temp. Min: \n' + dataForecast.list[id].main.temp_min;
+        tempMin.classList.add('overlayText');
+        tempMin.setAttribute('data-temp',id);
+        tempLabel.textContent='Temp. Min:';
+        if(degrees==='celcius')tempMin.innerHTML= convertToCelsius(dataForecast.list[id].main.temp_min)+' &#8451';
+        else tempMin.innerHTML= convertToFarhenheit(dataForecast.list[id].main.temp_min)+' &#8457';
         //TempMax
+        let tempmaxLabel = document.createElement('div');
+        tempmaxLabel.classList.add('overlayLabel');        
         let tempMax = document.createElement('div');
-        tempMax.classList.add('tempMax');
-        tempMax.textContent='Temp. Max: ' + dataForecast.list[id].main.temp_max;
+        tempMax.classList.add('overlayText');
+        tempMax.setAttribute('data-temp',id);
+        tempmaxLabel.textContent='Temp. Max:';
+        if(degrees==='celcius')tempMax.innerHTML= convertToCelsius(dataForecast.list[id].main.temp_max)+' &#8451';
+        else tempMax.innerHTML= convertToFarhenheit(dataForecast.list[id].main.temp_max)+' &#8457';
         //Wind
+        let windLabel = document.createElement('div');
+        windLabel.classList.add('overlayLabel');
+        let degLabel = document.createElement('div');
+        degLabel.classList.add('overlayLabel');
         let wind = document.createElement('div');
-        wind.classList.add('wind');
-        wind.textContent='Wind: ' + dataForecast.list[id].wind.speed;
+        wind.classList.add('overlayText');
+        windLabel.textContent = 'Wind:';
+        wind.textContent= dataForecast.list[id].wind.speed;
         let deg = document.createElement('div');
-        deg.classList.add('deg');
-        deg.textContent='Deg: ' + dataForecast.list[id].wind.deg;
+        deg.classList.add('overlayText');
+        degLabel.textContent = 'Deg:'
+        deg.textContent=dataForecast.list[id].wind.deg;
+        //Close
+        let close = document.createElement('div');
+        close.classList.add('close');
+        close.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M14 25.35h20v-3H14ZM24 44q-4.1 0-7.75-1.575-3.65-1.575-6.375-4.3-2.725-2.725-4.3-6.375Q4 28.1 4 24q0-4.15 1.575-7.8 1.575-3.65 4.3-6.35 2.725-2.7 6.375-4.275Q19.9 4 24 4q4.15 0 7.8 1.575 3.65 1.575 6.35 4.275 2.7 2.7 4.275 6.35Q44 19.85 44 24q0 4.1-1.575 7.75-1.575 3.65-4.275 6.375t-6.35 4.3Q28.15 44 24 44Zm0-3q7.1 0 12.05-4.975Q41 31.05 41 24q0-7.1-4.95-12.05Q31.1 7 24 7q-7.05 0-12.025 4.95Q7 16.9 7 24q0 7.05 4.975 12.025Q16.95 41 24 41Zm0-17Z"/></svg>';
+        close.addEventListener('click',e=> {
+            e.currentTarget.parentElement.remove();
+        });
         //Mount
+        overlay.appendChild(cloudsLabel);
         overlay.appendChild(clouds);
+        overlay.appendChild(humidityLabel);
         overlay.appendChild(humidity);
+        overlay.appendChild(tempLabel);
         overlay.appendChild(tempMin);
+        overlay.appendChild(tempmaxLabel);
         overlay.appendChild(tempMax);
+        overlay.appendChild(windLabel);
         overlay.appendChild(wind);
+        overlay.appendChild(degLabel);
         overlay.appendChild(deg);
-
+        overlay.appendChild(close);
 
     }
     cardOuter.appendChild(more);
