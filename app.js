@@ -1,22 +1,36 @@
-var makeItRain = function() {
-    var increment = 0;
-    var drops = "";
-    var backDrops = "";
-  
-    while (increment < 100) {
-      //couple random numbers to use for various randomizations
-      //random number between 98 and 1
-      var randoHundo = (Math.floor(Math.random() * (98 - 1 + 1) + 1));
-      //random number between 5 and 2
-      var randoFiver = (Math.floor(Math.random() * (5 - 2 + 1) + 2));
-      //increment
-      increment += randoFiver;
-      //add in a new raindrop with various randomizations to certain CSS properties
-      drops += '<div class="drop" style="left: ' + increment + '%; bottom: ' + (80) + '%; animation-delay: 0.' + randoHundo + 's; animation-duration: 0.' + randoHundo + 's;"><div class="stem" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.' + randoHundo + 's;"></div><div class="splat" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div></div>';
-      backDrops += '<div class="drop" style="right: ' + increment + '%; bottom: ' + (80) + '%; animation-delay: 0.' + randoHundo + 's; animation-duration: 0.' + randoHundo + 's;"><div class="stem" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.' + randoHundo + 's;"></div><div class="splat" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div></div>';
-    }
-  
-    document.querySelector('.rain.front-row').innerHTML=drops;
-    document.querySelector('.rain.back-row').innerHTML=backDrops;
-  }
-  makeItRain();
+
+let screen = document.querySelector('.screen');
+let rainCount = 0;
+let interval = setInterval(() => {
+    buildSingleDrop();
+    rainCount++;
+    if(rainCount>800)clearInterval(interval);
+
+}, 100);
+// for(let i=0;i<500;i++)buildSingleDrop();
+function buildSingleDrop() {
+    let rdOuter = document.createElement('div');
+    rdOuter.classList.add('rdOuter');
+    const randStart = Math.floor(Math.random() * window.innerWidth)
+    const randSideways = Math.floor(Math.random()*100);
+    const randSpeed = Math.floor(Math.random()*4) + 9;
+    const randThick = Math.floor(Math.random()*3) + 1;
+    const randLand = Math.floor(Math.random()*10) + 90;
+    const randDelay = Math.floor(Math.random() * 0);
+    rdOuter.style.setProperty('--sideways', `${randSideways}px`);
+    rdOuter.style.setProperty('--speed', `${randSpeed}s`);
+    rdOuter.style.setProperty('--thickness', `${randThick}px`);
+    rdOuter.style.setProperty('--start', `${randStart}px`);
+    rdOuter.style.setProperty('--delay', `${randDelay}s`);
+    rdOuter.style.setProperty('--land', `${randLand}vh`);
+    screen.appendChild(rdOuter);
+    
+    let rainDrop = document.createElement('div');
+    rainDrop.classList.add('rainDrop');
+    rdOuter.appendChild(rainDrop);
+    
+    let splash = document.createElement('img');
+    splash.classList.add('splash'); 
+    splash.src='rd.png';
+    rdOuter.appendChild(splash);
+}

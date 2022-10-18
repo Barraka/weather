@@ -2,6 +2,7 @@ let container = document.querySelector('.container');
 let search = document.querySelector('#search');
 let golook = document.querySelector('#golook');
 let output = document.querySelector('.output');
+let title = document.querySelector('.title');
 search.value="Cellettes";
 let now = document.querySelector('.now');
 let forecast = document.querySelector('.forecast');
@@ -13,6 +14,8 @@ scrollBehavior();
 let dataNow;
 let dataForecast;
 async function getWeatherData() {
+    title.style.transform='translateY(-400px)';
+    // title.remove();
     let town=search.value;
     let url_now=`https://api.openweathermap.org/data/2.5/weather?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
     let url_forecast=`https://api.openweathermap.org/data/2.5/forecast?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
