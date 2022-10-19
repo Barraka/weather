@@ -1,17 +1,75 @@
+import makeItRain from './app.js';
+import './styles.css';
+import './app.css';
+import logoPicture from './assets/Cloudy.png';
+
 let container = document.querySelector('.container');
 let search = document.querySelector('#search');
 let outerSearch = document.querySelector('.outerSearch');
 let golook = document.querySelector('#golook');
 let logo = document.querySelector('.logo');
-search.value="Cellettes";
-let now = document.querySelector('.now');
-let forecast = document.querySelector('.forecast');
+let logoImg = document.querySelector('#logoImg');
+search.value="Paris";
+logoImg.src=logoPicture;
+search.addEventListener('keydown',checkEnter);
 golook.addEventListener('click',getWeatherData);
 let degrees='celcius';
-
-let dataNow;
+makeItRain.start();
+// let dataNow;
+function checkEnter(e) {
+    if(e.key==='Enter')getWeatherData();
+}
 let dataForecast;
+
 async function getWeatherData() {
+    let town=search.value;
+    let url_now=`https://api.openweathermap.org/data/2.5/weather?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
+    let url_forecast=`https://api.openweathermap.org/data/2.5/forecast?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
+    
+    let responseNow, responseForecast;
+    let dataNow, dataForecast;
+    try {
+        await fetch(url_now)
+        .then(r=>{
+            if(r.ok)responseNow=r;
+            else {
+                notFound();
+                return;
+            }
+        })
+    } catch {
+        notFound();
+        return;
+    }
+    //Handle data    
+    if(responseNow){
+        dataNow = await responseNow.json();
+        responseForecast = await fetch(url_forecast);
+        dataForecast = await responseForecast.json();
+        doDOM(dataNow, dataForecast);
+    }
+
+    window.dataNow = dataNow;
+    function notFound() {
+        let errorContainer = document.createElement('div');
+        errorContainer.classList.add('errorContainer');
+        let errorText = document.createElement('div');
+        errorText.classList.add('errorText');
+        errorText.textContent=`${town} was not found. Try with a valid town or zip code`;
+        let errorClose = document.createElement('div');
+        errorClose.classList.add('errorClose');
+        errorClose.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="m16.5 33.6 7.5-7.5 7.5 7.5 2.1-2.1-7.5-7.5 7.5-7.5-2.1-2.1-7.5 7.5-7.5-7.5-2.1 2.1 7.5 7.5-7.5 7.5ZM24 44q-4.1 0-7.75-1.575-3.65-1.575-6.375-4.3-2.725-2.725-4.3-6.375Q4 28.1 4 24q0-4.15 1.575-7.8 1.575-3.65 4.3-6.35 2.725-2.7 6.375-4.275Q19.9 4 24 4q4.15 0 7.8 1.575 3.65 1.575 6.35 4.275 2.7 2.7 4.275 6.35Q44 19.85 44 24q0 4.1-1.575 7.75-1.575 3.65-4.275 6.375t-6.35 4.3Q28.15 44 24 44Zm0-3q7.1 0 12.05-4.975Q41 31.05 41 24q0-7.1-4.95-12.05Q31.1 7 24 7q-7.05 0-12.025 4.95Q7 16.9 7 24q0 7.05 4.975 12.025Q16.95 41 24 41Zm0-17Z"/></svg>';
+        errorContainer.appendChild(errorText);
+        errorContainer.appendChild(errorClose);
+        errorClose.addEventListener('click', e=>{e.currentTarget.parentElement.remove();});
+        outerSearch.appendChild(errorContainer);
+    }    
+}
+
+function doDOM(n,f) {
+    let data=n;
+    let dataForecast=f;
+    //Now section
     logo.style.transform='translateY(-400px)';
     outerSearch.classList.remove('searchInitial');
     while(outerSearch.nextElementSibling)outerSearch.nextElementSibling.remove();
@@ -26,14 +84,6 @@ async function getWeatherData() {
     container.appendChild(now);
     container.appendChild(forecast);
     scrollBehavior();
-    // title.remove();
-    let town=search.value;
-    let url_now=`https://api.openweathermap.org/data/2.5/weather?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
-    let url_forecast=`https://api.openweathermap.org/data/2.5/forecast?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
-    
-    let response = await fetch(url_now);
-    let data = await response.json();
-    window.dataNow = data;
     //Overlay
     let overlay = document.createElement('div');
     overlay.classList.add('overlay');
@@ -96,6 +146,10 @@ async function getWeatherData() {
     rightPane.appendChild(humLabel);
     rightPane.appendChild(humidity);
     //Middle Pane
+    //Name
+    let place = document.createElement('div');
+    place.classList.add('place');
+    place.textContent=data.name;
     //Icon
     const code = data.weather[0].icon;
     let icon = document.createElement('div');
@@ -128,6 +182,7 @@ async function getWeatherData() {
     tempOuter.appendChild(tempSign);
     let middlePane = document.createElement('div');
     middlePane.classList.add('middlePane');
+    middlePane.appendChild(place);
     middlePane.appendChild(icon);
     middlePane.appendChild(description);
     middlePane.appendChild(tempOuter);
@@ -138,20 +193,17 @@ async function getWeatherData() {
     //Adapt BG
     let clouds=data.clouds.all;
     now.style.backgroundColor=getBg(clouds);
-    
+
 
     //Forecast
-    response = await fetch(url_forecast);
-    data = await response.json();
-    window.data2=data;
-    dataForecast=data;
+    
     // data.list.forEach(x=>createCard(x));
-    const listLength=data.list.length;
+    const listLength=dataForecast.list.length;
     for(let i=0;i<listLength;i++) {
-        createCard(data.list[i],i);
+        createCard(dataForecast.list[i],i);
     }
-
 }
+
 function toggleTemp() {
     if(degrees==='celcius')degrees='fahrenheit';
     else degrees='celcius';
@@ -189,7 +241,7 @@ function createCard(d,i) {
     cardOuter.classList.add('cardOuter');
     cardOuter.setAttribute('data-id',i);
     //Date
-    dateData=new Date(d.dt * 1000)
+    let dateData=new Date(d.dt * 1000)
     let date = document.createElement('div');
     date.classList.add('date');
     

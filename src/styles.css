@@ -56,6 +56,7 @@ body {
     padding:10px;
     transition: all 0.8s ease;    
     cursor: pointer;
+    position:relative;
 }
 .searchInitial {
     transform: translateY(400px);    
@@ -77,6 +78,12 @@ body {
     fill:var(--colorDarkBlue);
     background-color: white;
     border-radius: 5px;
+}
+.place {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
 }
 .now {
     display: flex;
@@ -237,4 +244,40 @@ img {
     fill:var(--colorDarkBlue);
     background-color: white;
     border-radius: 5px;
+}
+.errorContainer {
+    position:absolute;    
+    top:0;
+    left:0;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--colorDarkBlue);
+    gap:20px;
+    border-radius: 10px;
+    z-index: 3;
+}
+.errorText {
+    max-width: 100%;
+    white-space: initial;
+    text-align: center;
+    padding:10px;    
+    color:white;
+}
+.errorClose {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+.errorClose:hover {
+    background-color: white;
+}
+.errorClose:hover svg {
+    
+    stroke: var(--colorDarkBlue);
+    fill: var(--colorDarkBlue);
 }
