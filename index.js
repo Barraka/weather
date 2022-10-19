@@ -1,20 +1,36 @@
 let container = document.querySelector('.container');
 let search = document.querySelector('#search');
+let outerSearch = document.querySelector('.outerSearch');
 let golook = document.querySelector('#golook');
 let output = document.querySelector('.output');
-let title = document.querySelector('.title');
+let logo = document.querySelector('.logo');
 search.value="Cellettes";
 let now = document.querySelector('.now');
 let forecast = document.querySelector('.forecast');
 golook.addEventListener('click',getWeatherData);
-const innerForecast = document.querySelector('.innerForecast');
+// const innerForecast = document.querySelector('.innerForecast');
 let degrees='celcius';
-window.slider=innerForecast;
-scrollBehavior();
+// window.slider=innerForecast;
+
 let dataNow;
 let dataForecast;
 async function getWeatherData() {
-    title.style.transform='translateY(-400px)';
+    logo.style.transform='translateY(-400px)';
+    outerSearch.classList.remove('searchInitial');
+    //Build elements
+    let now = document.createElement('div');
+    now.classList.add('now');
+    let forecast = document.createElement('div');
+    forecast.classList.add('forecast');
+    let innerForecast = document.createElement('div');
+    innerForecast.classList.add('innerForecast');
+    forecast.appendChild(innerForecast)
+    let output = document.createElement('div');
+    output.classList.add('output');
+    container.appendChild(now);
+    container.appendChild(forecast);
+    container.appendChild(output);
+    scrollBehavior();
     // title.remove();
     let town=search.value;
     let url_now=`https://api.openweathermap.org/data/2.5/weather?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
@@ -315,6 +331,7 @@ function createCard(d,i) {
     }
     cardOuter.appendChild(more);
     //Build
+    let innerForecast = document.querySelector('.innerForecast');
     innerForecast.appendChild(cardOuter);
 }
 function convertToCelsius(t) {
@@ -332,7 +349,7 @@ function getIcon(n) {
 }
 
 function scrollBehavior() {
-    
+    let innerForecast = document.querySelector('.innerForecast');
     let isDown = false;
     let startX;
     let currentPos;

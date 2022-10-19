@@ -13,9 +13,10 @@ body {
     height:100vh;
 
 }
-.title {
+.logo {
     /* margin: 0 auto; */
     width:400px;
+    max-width: 80%;
     position:absolute;
     left:0;
     right:0;
@@ -49,10 +50,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: antiquewhite;
+    background-color: rgb(189, 117, 24);
     border-radius: 10px;
     padding:10px;
-    
+    transition: all 0.3s ease;    
+    cursor: pointer;
+}
+.searchInitial {
+    transform: translateY(200px);    
 }
 .outerSearch input {
     text-align: center;
@@ -63,6 +68,7 @@ body {
     transform: scale(0.7);
     fill:blue;
     stroke:blue;
+    cursor: pointer;
 }
 .outerSearch svg:hover {
     cursor: pointer;
@@ -105,7 +111,7 @@ body {
     cursor: pointer;
 }
 .tempSign {
-    transition: all 0.3s ease-in;
+    transition: all 0.2s ease-in;
 }
 .tempOuter:hover .tempSign {
     transform:scale(1.4);
