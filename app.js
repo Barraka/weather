@@ -4,7 +4,7 @@ let rainCount = 0;
 let interval = setInterval(() => {
     buildSingleDrop();
     rainCount++;
-    if(rainCount>800)clearInterval(interval);
+    if(rainCount>200)clearInterval(interval);
 
 }, 100);
 // for(let i=0;i<500;i++)buildSingleDrop();

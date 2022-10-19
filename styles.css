@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Corben&family=Dosis:wght@600&family=Open+Sans:wght@500&family=Poppins&family=Roboto&display=swap');
+:root {
+    --colorDarkBlue: rgb(28, 19, 150);
+    --colorLightBlue: rgb(9, 78, 206);
+}
 * {
     margin:0;
     padding:0;
@@ -9,7 +13,7 @@
 body {
     background-color: rgb(37,37,85);
     background: linear-gradient(to bottom, rgba(141,150,172,1) 0%, rgba(138,138,167,1) 60%, rgba(50,50,110,1) 90%,
-    rgb(37,37,85) 100%,rgb(37,37,85) 200%);
+    var(--colorDarkBlue) 100%);
     height:100vh;
 
 }
@@ -50,7 +54,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(28, 19, 150);
+    background-color: var(--colorDarkBlue);
     border-radius: 10px;
     padding:10px;
     transition: all 0.3s ease;    
@@ -72,8 +76,10 @@ body {
 }
 .outerSearch svg:hover {
     cursor: pointer;
-    stroke:rgb(9, 146, 32);
-    fill:rgb(9, 146, 32);
+    stroke:var(--colorDarkBlue);
+    fill:var(--colorDarkBlue);
+    background-color: white;
+    border-radius: 5px;
 }
 .now {
     display: flex;
@@ -172,7 +178,7 @@ img {
     margin: 0 10px;
     padding:4px;
     border-radius:10px;
-    background-color: rgb(64,128,65);
+    /* background-color: rgb(64,128,65); */
     border: 2px solid transparent;
     text-align: center;
     position: relative;
@@ -200,7 +206,7 @@ img {
     left:0;
     width:100%;
     height:100%;
-    background-color: rgb(9, 78, 206);
+    background-color: var(--colorDarkBlue);
     border-radius: 10px;
     display: flex;
     justify-content: center;

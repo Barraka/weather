@@ -2,21 +2,19 @@ let container = document.querySelector('.container');
 let search = document.querySelector('#search');
 let outerSearch = document.querySelector('.outerSearch');
 let golook = document.querySelector('#golook');
-let output = document.querySelector('.output');
 let logo = document.querySelector('.logo');
 search.value="Cellettes";
 let now = document.querySelector('.now');
 let forecast = document.querySelector('.forecast');
 golook.addEventListener('click',getWeatherData);
-// const innerForecast = document.querySelector('.innerForecast');
 let degrees='celcius';
-// window.slider=innerForecast;
 
 let dataNow;
 let dataForecast;
 async function getWeatherData() {
     logo.style.transform='translateY(-400px)';
     outerSearch.classList.remove('searchInitial');
+    while(outerSearch.nextElementSibling)outerSearch.nextElementSibling.remove();
     //Build elements
     let now = document.createElement('div');
     now.classList.add('now');
@@ -25,11 +23,8 @@ async function getWeatherData() {
     let innerForecast = document.createElement('div');
     innerForecast.classList.add('innerForecast');
     forecast.appendChild(innerForecast)
-    let output = document.createElement('div');
-    output.classList.add('output');
     container.appendChild(now);
     container.appendChild(forecast);
-    container.appendChild(output);
     scrollBehavior();
     // title.remove();
     let town=search.value;
@@ -384,9 +379,14 @@ function scrollBehavior() {
         const x = e.pageX;
         let walk = (x - startX) * 1;
         let distance = walk - currentPos;
+        console.log('distance: ' + distance);
         let coord = innerForecast.lastElementChild.getBoundingClientRect();
         let lastElem=coord.x+coord.width;
-        if(distance<=0 && (lastElem>=window.innerWidth ||walk>0))innerForecast.style.cssText=`transform: translateX(${distance}px)`;
+        if(distance<=0 && (lastElem>=window.innerWidth ||walk>0)) {
+            console.log('inner distance: ' + distance);
+            // innerForecast.style.cssText=`transform: translateX(${distance}px)`;
+            innerForecast.style.transform=`translateX(${distance}px)`;
+        }
     }
 }
 
