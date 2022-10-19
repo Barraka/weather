@@ -50,14 +50,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(189, 117, 24);
+    background-color: rgb(28, 19, 150);
     border-radius: 10px;
     padding:10px;
     transition: all 0.3s ease;    
     cursor: pointer;
 }
 .searchInitial {
-    transform: translateY(200px);    
+    transform: translateY(400px);    
 }
 .outerSearch input {
     text-align: center;
@@ -66,8 +66,8 @@ body {
 }
 .outerSearch svg {
     transform: scale(0.7);
-    fill:blue;
-    stroke:blue;
+    fill:white;
+    stroke:white;
     cursor: pointer;
 }
 .outerSearch svg:hover {
