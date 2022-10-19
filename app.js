@@ -31,6 +31,6 @@ function buildSingleDrop() {
     
     let splash = document.createElement('img');
     splash.classList.add('splash'); 
-    splash.src='rd.png';
+    splash.src='assets/rd.png';
     rdOuter.appendChild(splash);
 }

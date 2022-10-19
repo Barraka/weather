@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Corben&family=Dosis:wght@600&family=Open+Sans:wght@500&family=Poppins&family=Roboto&display=swap');
 :root {
     --colorDarkBlue: rgb(28, 19, 150);
-    --colorLightBlue: rgb(9, 78, 206);
+    --colorIcon: rgb(11, 29, 61);
 }
 * {
     margin:0;
@@ -18,7 +18,6 @@ body {
 
 }
 .logo {
-    /* margin: 0 auto; */
     width:400px;
     max-width: 80%;
     position:absolute;
@@ -27,12 +26,11 @@ body {
     top: 100px;
     margin-left: auto; 
     margin-right: auto; 
-    transition: all 0.5s ease;
+    transition: all 0.8s ease;
 }
 .img {
     max-width: 100%;
     height:auto;
-    /* object-fit: cover;   */
 }
 .container {
     position: relative;
@@ -40,7 +38,6 @@ body {
     white-space: nowrap;
     transition: all 0.2s;
     user-select: none;
-    /* cursor: pointer; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,7 +54,7 @@ body {
     background-color: var(--colorDarkBlue);
     border-radius: 10px;
     padding:10px;
-    transition: all 0.3s ease;    
+    transition: all 0.8s ease;    
     cursor: pointer;
 }
 .searchInitial {
@@ -121,7 +118,7 @@ body {
 }
 .tempOuter:hover .tempSign {
     transform:scale(1.4);
-    color:green;
+    color:var(--colorDarkBlue);
 }
 .forecast {
     display: flex;
@@ -138,10 +135,6 @@ body {
 }
 .forecast::-webkit-scrollbar {
     display: none;
-}
-.forecast * {
-    word-wrap: break-word;
-    word-break: break-all;    
 }
 .innerForecast {
     height: fit-content;
@@ -178,7 +171,6 @@ img {
     margin: 0 10px;
     padding:4px;
     border-radius:10px;
-    /* background-color: rgb(64,128,65); */
     border: 2px solid transparent;
     text-align: center;
     position: relative;
@@ -189,16 +181,24 @@ img {
     align-items: center;
     gap:5px;
 }
-
+.iconImg {
+    background-color: var(--colorDarkBlue);
+    border-radius: 50%;
+}
 .more {
     transform: scale(0.7);
     stroke:white;
     fill:white;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .more:hover {
-    stroke:rgb(9, 146, 32);
-    fill:rgb(9, 146, 32);
+    stroke:var(--colorDarkBlue);
+    fill:var(--colorDarkBlue);
+    background-color: white;
+    border-radius: 5px;
 }
 .overlay {
     position:absolute;
@@ -233,6 +233,8 @@ img {
 }
 .overlay svg:hover {
     cursor: pointer;
-    stroke:rgb(9, 146, 32);
-    fill:rgb(9, 146, 32);
+    stroke:var(--colorDarkBlue);
+    fill:var(--colorDarkBlue);
+    background-color: white;
+    border-radius: 5px;
 }
