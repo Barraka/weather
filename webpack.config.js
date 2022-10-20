@@ -53,6 +53,7 @@ module.exports = {
     },
     plugins: [
         new htmlWebpackPlugin({
+            favicon: path.resolve(__dirname,'./src/assets/favicon.png'),
             title: 'Webpack App',
             filename: 'index.html',
             template: 'src/template.html',
