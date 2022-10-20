@@ -15,19 +15,16 @@ search.addEventListener('keydown',checkEnter);
 golook.addEventListener('click',getWeatherData);
 let degrees='celcius';
 makeItRain.start();
-// let dataNow;
 function checkEnter(e) {
     if(e.key==='Enter')getWeatherData();
 }
-let dataForecast;
+let dataNow, dataForecast;
 
 async function getWeatherData() {
     let town=search.value;
     let url_now=`https://api.openweathermap.org/data/2.5/weather?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
-    let url_forecast=`https://api.openweathermap.org/data/2.5/forecast?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;
-    
-    let responseNow, responseForecast;
-    let dataNow, dataForecast;
+    let url_forecast=`https://api.openweathermap.org/data/2.5/forecast?q=${town}&APPID=408189a9139c5bfc0cc0a7c9ed3e9235`;    
+    let responseNow, responseForecast;    
     try {
         await fetch(url_now)
         .then(r=>{
@@ -48,8 +45,6 @@ async function getWeatherData() {
         dataForecast = await responseForecast.json();
         doDOM(dataNow, dataForecast);
     }
-
-    window.dataNow = dataNow;
     function notFound() {
         let errorContainer = document.createElement('div');
         errorContainer.classList.add('errorContainer');
@@ -129,8 +124,6 @@ function doDOM(n,f) {
     tempMax.classList.add('nowText');
     tempMax.setAttribute('data-temp','now');
     tempMax.innerHTML=convertToCelsius(data.main.temp_max)+' &#8451';
-    // if(degrees==='celcius')temp.innerHTML=convertToCelsius(d.main.temp)+' &#8451';
-    // else temp.innerHTML=convertToFarhenheit(d.main.temp) + ' &#8457';
     let humLabel = document.createElement('div');
     humLabel.classList.add('nowLabel');
     humLabel.textContent = 'Humidity:';
@@ -193,11 +186,7 @@ function doDOM(n,f) {
     //Adapt BG
     let clouds=data.clouds.all;
     now.style.backgroundColor=getBg(clouds);
-
-
     //Forecast
-    
-    // data.list.forEach(x=>createCard(x));
     const listLength=dataForecast.list.length;
     for(let i=0;i<listLength;i++) {
         createCard(dataForecast.list[i],i);
@@ -243,8 +232,7 @@ function createCard(d,i) {
     //Date
     let dateData=new Date(d.dt * 1000)
     let date = document.createElement('div');
-    date.classList.add('date');
-    
+    date.classList.add('date');    
     let day = document.createElement('div');
     day.classList.add('day');
     day.textContent=dateData.toLocaleDateString("en-EN",{weekday: 'long'}).slice(0,3);
@@ -252,8 +240,7 @@ function createCard(d,i) {
     dayOuter.classList.add('dayOuter');
     let day2 = document.createElement('div');
     day2.classList.add('day2');
-    day2.textContent=dateData.getDate();
-    
+    day2.textContent=dateData.getDate();    
     let month = document.createElement('div');
     month.classList.add('month');
     month.textContent=dateData.toDateString().substr(4,3);
@@ -263,13 +250,9 @@ function createCard(d,i) {
     time.classList.add('time');
     time.textContent=dateData.toTimeString().substr(0,5);
     date.appendChild(day);
-    date.appendChild(dayOuter);
-    
-    // date.appendChild(month);
+    date.appendChild(dayOuter);    
     date.appendChild(time);
-    cardOuter.appendChild(date);
-    
-
+    cardOuter.appendChild(date);    
     //Icon
     const code = d.weather[0].icon;
     let icon = document.createElement('div');
@@ -290,12 +273,10 @@ function createCard(d,i) {
     temp.setAttribute('data-temp',i);
     if(degrees==='celcius')temp.innerHTML=convertToCelsius(d.main.temp)+' &#8451';
     else temp.innerHTML=convertToFarhenheit(d.main.temp) + ' &#8457';
-    // temp.innerHTML=convertToCelsius(d.main.temp);
     cardOuter.appendChild(temp);
     //Clouds
     let clouds=d.clouds.all;
     cardOuter.style.backgroundColor=getBg(clouds);
-
     //More info icon
     let more = document.createElement('div');
     more.classList.add('more');
@@ -374,7 +355,6 @@ function createCard(d,i) {
         overlay.appendChild(degLabel);
         overlay.appendChild(deg);
         overlay.appendChild(close);
-
     }
     cardOuter.appendChild(more);
     //Build
@@ -391,16 +371,11 @@ function convertToFarhenheit(t) {
     return value.toFixed(1);;
 }
 
-function getIcon(n) {
-    `https://openweathermap.org/img/wn/${n}@2x.png`
-}
-
 function scrollBehavior() {
     let innerForecast = document.querySelector('.innerForecast');
     let isDown = false;
     let startX;
-    let currentPos;
-    
+    let currentPos;    
     innerForecast.addEventListener('mousedown', (e) => {
       down(e);
     });
@@ -436,7 +411,6 @@ function scrollBehavior() {
         let lastElem=coord.x+coord.width;
         if(distance<=0 && (lastElem>=window.innerWidth ||walk>0)) {
             console.log('inner distance: ' + distance);
-            // innerForecast.style.cssText=`transform: translateX(${distance}px)`;
             innerForecast.style.transform=`translateX(${distance}px)`;
         }
     }

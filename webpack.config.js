@@ -2,7 +2,8 @@ let path=require('path');;
 let htmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
+    //mode: 'development',
+    mode: 'production',
     entry: {
         bundle: path.resolve(__dirname,'./src/index.js'),
     },
@@ -12,7 +13,7 @@ module.exports = {
         clean:true,
         assetModuleFilename:'[name].[contenthash][ext]',
     },
-    devtool: 'source-map',
+    //devtool: 'source-map',
     devServer: {
         static: {
             directory: path.resolve(__dirname,'dist')
