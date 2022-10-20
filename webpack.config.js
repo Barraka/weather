@@ -8,6 +8,7 @@ module.exports = {
         bundle: path.resolve(__dirname,'./src/index.js'),
     },
     output: {
+        publicPath: '',
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].js',
         clean:true,
